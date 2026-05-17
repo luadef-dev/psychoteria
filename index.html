@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychoteria / Forum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
+    <style>
+        /* Базовые настройки и темный фон */
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            background: #0d0d0d; 
+            color: #ffffff; 
+            font-family: 'Raleway', sans-serif; 
+            font-size: 14px; 
+            letter-spacing: 0.5px; 
+        }
+        a { color: #ffffff; text-decoration: none; transition: all 0.25s ease; }
+        a:hover { color: #a1a1a1; }
+        .pun { min-height: 100vh; position: relative; z-index: 1; padding: 20px 0; box-sizing: border-box; }
+        
+        /* Главная обертка с эффектом размытия (Glassmorphism) */
+        .punwrap { 
+            width: 1100px; 
+            max-width: calc(100% - 32px); 
+            margin: 20px auto; 
+            background: rgba(20, 20, 20, 0.6); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); 
+            padding: 24px; 
+            box-sizing: border-box; 
+        }
+        .block { background: rgba(30, 30, 30, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); margin-bottom: 16px; overflow: hidden; }
+        .inbox { padding: 16px 20px; }
+        #brdtitle { padding: 20px 20px 12px 20px; text-align: left; }
+        #brdtitle h1 { margin: 0; font-size: 32px; font-weight: 900; text-transform: lowercase; letter-spacing: -1px; }
+        #brdtitle h1 span { color: #666666; font-weight: 400; }
+        
+        /* Меню навигации */
+        #brdmenu { background: rgba(255, 255, 255, 0.03); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 0 20px; }
+        #brdmenu ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+        #brdmenu li { line-height: 50px; }
+        #brdmenu a { color: #8c8c8c; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        #brdmenu a:hover { color: #ffffff; }
+        
+        /* Кнопка скачивания лоадера */
+        #navbuy a { color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); line-height: 30px; padding: 0 14px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); }
+        #navbuy a:hover { background: #ffffff; color: #0d0d0d; border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+        #brdwelcome { background: rgba(0, 0, 0, 0.2); font-size: 13px; color: #999999; display: flex; justify-content: space-between; align-items: center; }
+        #brdwelcome p { margin: 0; }
+        #brdwelcome .conl b { color: #ffffff; }
+        
+        /* Стили форм авторизации (вход / регистрация) */
+        .auth-box { max-width: 400px; margin: 60px auto; background: rgba(30, 30, 30, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .auth-box h2 { margin-top: 0; margin-bottom: 24px; font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 1px; font-size: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #777777; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .form-control { width: 100%; padding: 12px; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: #fff; box-sizing: border-box; font-family: inherit; transition: border 0.2s; }
+        .form-control:focus { border-color: rgba(255,255,255,0.3); outline: none; }
+        .btn { width: 100%; padding: 14px; background: #ffffff; color: #0d0d0d; border: none; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { background: #d1d1d1; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .auth-switch { text-align: center; margin-top: 20px; font-size: 13px; color: #666666; }
+        .auth-switch a { color: #ffffff; font-weight: 700; }
+        .error-msg { color: #ff5252; text-align: center; margin-bottom: 16px; font-size: 13px; font-weight: 700; background: rgba(255,82,82,0.1); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,82,82,0.2); }
+
+        /* Стили разделов форума */
+        .section { background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+        .section-title { padding: 16px 20px; font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .table-head, .forum-row { display: grid; grid-template-columns: 1fr 320px; }
+        .table-head { padding: 12px 20px; color: #555555; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; background: rgba(0, 0, 0, 0.1); }
+        .forum-row { padding: 18px 20px; border-top: 1px solid rgba(255, 255, 255, 0.03); align-items: center; transition: background 0.2s ease; }
+        .forum-row:hover { background: rgba(255, 255, 255, 0.02); }
+        .forum-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+        .forum-icon { width: 8px; height: 8px; border-radius: 50%; background: #ffffff; flex: 0 0 auto; box-shadow: 0 0 8px #ffffff; }
+        .forum-title { font-size: 15px; font-weight: 700; }
+        .forum-desc { font-size: 13px; color: #777777; margin-top: 2px; }
+        .forum-last { padding-left: 20px; font-size: 13px; color: #cccccc; border-left: 1px solid rgba(255, 255, 255, 0.03); }
+        .forum-last .date { color: #555555; font-size: 12px; margin-top: 2px; }
+        .mark-read { padding: 14px 20px; font-size: 12px; border-top: 1px solid rgba(255, 255, 255, 0.03); background: rgba(0, 0, 0, 0.05); }
+        .mark-read a { color: #777777; font-weight: 700; }
+        .mark-read a:hover { color: #ffffff; }
+        
+        /* Статистика */
+        .stats { background: rgba(30, 30, 30, 0.4); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
+        .stats-title { font-weight: 700; margin-bottom: 6px; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        .stats-line { font-size: 13px; color: #777777; }
+        .stats-line b { color: #cccccc; }
+        #brdfooter p { margin: 0; color: #444444; font-size: 12px; }
+        .footer-links { margin-top: 6px; display: flex; gap: 12px; }
+        .footer-links a { color: #666666; }
+        .footer-links a:hover { color: #ffffff; }
+    </style>
+</head>
+<body>
+<div id="punindex" class="pun">
+    <div class="punwrap">
+        <div id="brdheader" class="block">
+            <div class="box">
+                <div id="brdtitle" class="inbox">
+                    <h1><a href="/">psycho<span>teria</span></a></h1>
+                </div>
+                <div id="brdmenu">
+                    <ul>
+                        <li id="navindex"><a href="/">Index</a></li>
+                        {{USER_MENU}}
+                    </ul>
+                </div>
+                <div id="brdwelcome" class="inbox">
+                    {{WELCOME_BOX}}
+                </div>
+            </div>
+        </div>
+
+        {{ERROR_MSG}}
+        {{CONTENT}}
+
+        <div id="brdfooter" class="block">
+            <div class="box">
+                <div class="inbox">
+                    <p>Psychoteria &copy; 2026</p>
+                    <p class="footer-links"><a href="#">Terms and Conditions</a> / <a href="#">Privacy policy</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
