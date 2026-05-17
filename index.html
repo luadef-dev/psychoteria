@@ -3,131 +3,456 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psychoteria / Forum</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
-    <style>
-        /* Базовые настройки и темный фон */
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            background: #0d0d0d; 
-            color: #ffffff; 
-            font-family: 'Raleway', sans-serif; 
-            font-size: 14px; 
-            letter-spacing: 0.5px; 
-        }
-        a { color: #ffffff; text-decoration: none; transition: all 0.25s ease; }
-        a:hover { color: #a1a1a1; }
-        .pun { min-height: 100vh; position: relative; z-index: 1; padding: 20px 0; box-sizing: border-box; }
-        
-        /* Главная обертка с эффектом размытия (Glassmorphism) */
-        .punwrap { 
-            width: 1100px; 
-            max-width: calc(100% - 32px); 
-            margin: 20px auto; 
-            background: rgba(20, 20, 20, 0.6); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px); 
-            border-radius: 16px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); 
-            padding: 24px; 
-            box-sizing: border-box; 
-        }
-        .block { background: rgba(30, 30, 30, 0.4); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); margin-bottom: 16px; overflow: hidden; }
-        .inbox { padding: 16px 20px; }
-        #brdtitle { padding: 20px 20px 12px 20px; text-align: left; }
-        #brdtitle h1 { margin: 0; font-size: 32px; font-weight: 900; text-transform: lowercase; letter-spacing: -1px; }
-        #brdtitle h1 span { color: #666666; font-weight: 400; }
-        
-        /* Меню навигации */
-        #brdmenu { background: rgba(255, 255, 255, 0.03); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 0 20px; }
-        #brdmenu ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-        #brdmenu li { line-height: 50px; }
-        #brdmenu a { color: #8c8c8c; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        #brdmenu a:hover { color: #ffffff; }
-        
-        /* Кнопка скачивания лоадера */
-        #navbuy a { color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); line-height: 30px; padding: 0 14px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); }
-        #navbuy a:hover { background: #ffffff; color: #0d0d0d; border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
-        #brdwelcome { background: rgba(0, 0, 0, 0.2); font-size: 13px; color: #999999; display: flex; justify-content: space-between; align-items: center; }
-        #brdwelcome p { margin: 0; }
-        #brdwelcome .conl b { color: #ffffff; }
-        
-        /* Стили форм авторизации (вход / регистрация) */
-        .auth-box { max-width: 400px; margin: 60px auto; background: rgba(30, 30, 30, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .auth-box h2 { margin-top: 0; margin-bottom: 24px; font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 1px; font-size: 20px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #777777; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .form-control { width: 100%; padding: 12px; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: #fff; box-sizing: border-box; font-family: inherit; transition: border 0.2s; }
-        .form-control:focus { border-color: rgba(255,255,255,0.3); outline: none; }
-        .btn { width: 100%; padding: 14px; background: #ffffff; color: #0d0d0d; border: none; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
-        .btn:hover { background: #d1d1d1; box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .auth-switch { text-align: center; margin-top: 20px; font-size: 13px; color: #666666; }
-        .auth-switch a { color: #ffffff; font-weight: 700; }
-        .error-msg { color: #ff5252; text-align: center; margin-bottom: 16px; font-size: 13px; font-weight: 700; background: rgba(255,82,82,0.1); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,82,82,0.2); }
+    <title>Psychoteria — Premium Software Loader</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Space+Grotesk:400,500,700|JetBrains+Mono:400,700" rel="stylesheet">
 
-        /* Стили разделов форума */
-        .section { background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
-        .section-title { padding: 16px 20px; font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
-        .table-head, .forum-row { display: grid; grid-template-columns: 1fr 320px; }
-        .table-head { padding: 12px 20px; color: #555555; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; background: rgba(0, 0, 0, 0.1); }
-        .forum-row { padding: 18px 20px; border-top: 1px solid rgba(255, 255, 255, 0.03); align-items: center; transition: background 0.2s ease; }
-        .forum-row:hover { background: rgba(255, 255, 255, 0.02); }
-        .forum-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
-        .forum-icon { width: 8px; height: 8px; border-radius: 50%; background: #ffffff; flex: 0 0 auto; box-shadow: 0 0 8px #ffffff; }
-        .forum-title { font-size: 15px; font-weight: 700; }
-        .forum-desc { font-size: 13px; color: #777777; margin-top: 2px; }
-        .forum-last { padding-left: 20px; font-size: 13px; color: #cccccc; border-left: 1px solid rgba(255, 255, 255, 0.03); }
-        .forum-last .date { color: #555555; font-size: 12px; margin-top: 2px; }
-        .mark-read { padding: 14px 20px; font-size: 12px; border-top: 1px solid rgba(255, 255, 255, 0.03); background: rgba(0, 0, 0, 0.05); }
-        .mark-read a { color: #777777; font-weight: 700; }
-        .mark-read a:hover { color: #ffffff; }
-        
-        /* Статистика */
-        .stats { background: rgba(30, 30, 30, 0.4); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; }
-        .stats-title { font-weight: 700; margin-bottom: 6px; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
-        .stats-line { font-size: 13px; color: #777777; }
-        .stats-line b { color: #cccccc; }
-        #brdfooter p { margin: 0; color: #444444; font-size: 12px; }
-        .footer-links { margin-top: 6px; display: flex; gap: 12px; }
-        .footer-links a { color: #666666; }
-        .footer-links a:hover { color: #ffffff; }
+    <style>
+        :root {
+            --bg-pure: #050505;
+            --bg-card: rgba(15, 15, 15, 0.7);
+            --border-alpha: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #666666;
+            --text-dark: #333333;
+            --accent-glow: rgba(255, 255, 255, 0.15);
+            --status-green: #00ff66;
+            --font-main: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-pure);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Высокотехнологичный бэкграунд: Сетка + Свечение */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+        }
+
+        /* Главный контейнер */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 680px;
+            max-width: calc(100% - 32px);
+            margin: 40px 0;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Основная панель */
+        .main-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-alpha);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+            margin-bottom: 24px;
+        }
+
+        /* Шапка с брендингом */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            text-transform: lowercase;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .badge-version {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-alpha);
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: #888;
+            vertical-align: middle;
+            margin-left: 8px;
+            letter-spacing: 0;
+        }
+
+        .tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Панель статусов (Сетка) */
+        .status-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .status-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .status-value {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .status-value.secure {
+            color: var(--status-green);
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        /* Интерактивный терминал логов */
+        .console-box {
+            background: #020202;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 18px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #888;
+            height: 120px;
+            overflow-y: hidden;
+            margin-bottom: 36px;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.6);
+            text-align: left;
+        }
+
+        .console-line {
+            margin-bottom: 4px;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+
+        .console-line span.prefix {
+            color: var(--text-dark);
+            margin-right: 6px;
+        }
+
+        .console-line span.success {
+            color: var(--status-green);
+        }
+
+        /* Кнопки действий */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--bg-pure);
+            border: 1px solid var(--text-main);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+        }
+
+        .btn-primary:hover {
+            background: #e5e5e5;
+            border-color: #e5e5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
+            border: 1px solid var(--border-alpha);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Спецификации / Фичи ниже */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .feature-item {
+            background: rgba(15, 15, 15, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: border 0.3s;
+        }
+
+        .feature-item:hover {
+            border-color: var(--border-alpha);
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        .feature-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Нижний копирайт */
+        .footer-text {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 12px;
+            color: var(--text-dark);
+            letter-spacing: 0.5px;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { width: 500px; height: 500px; opacity: 0.8; }
+            100% { width: 650px; height: 650px; opacity: 1; }
+        }
+
+        /* Адаптивность для смартфонов */
+        @media (max-width: 640px) {
+            .main-panel { padding: 32px 24px; }
+            .status-board { grid-template-columns: 1fr; gap: 12px; }
+            .actions-grid { grid-template-columns: 1fr; gap: 14px; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-<div id="punindex" class="pun">
-    <div class="punwrap">
-        <div id="brdheader" class="block">
-            <div class="box">
-                <div id="brdtitle" class="inbox">
-                    <h1><a href="/">psycho<span>teria</span></a></h1>
-                </div>
-                <div id="brdmenu">
-                    <ul>
-                        <li id="navindex"><a href="/">Index</a></li>
-                        {{USER_MENU}}
-                    </ul>
-                </div>
-                <div id="brdwelcome" class="inbox">
-                    {{WELCOME_BOX}}
-                </div>
-            </div>
-        </div>
 
-        {{ERROR_MSG}}
-        {{CONTENT}}
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
 
-        <div id="brdfooter" class="block">
-            <div class="box">
-                <div class="inbox">
-                    <p>Psychoteria &copy; 2026</p>
-                    <p class="footer-links"><a href="#">Terms and Conditions</a> / <a href="#">Privacy policy</a></p>
+    <div class="container">
+        
+        <main class="main-panel">
+            <header class="header">
+                <div class="logo">psycho<span>teria</span><span class="badge-version">v2.4.1</span></div>
+                <p class="tagline">Next-Generation Framework</p>
+            </header>
+
+            <section class="status-board">
+                <div class="status-card">
+                    <p class="status-label">Anti-Cheat</p>
+                    <p class="status-value secure">Undetected</p>
                 </div>
+                <div class="status-card">
+                    <p class="status-label">Uptime</p>
+                    <p class="status-value">99.9%</p>
+                </div>
+                <div class="status-card">
+                    <p class="status-label">Compatibility</p>
+                    <p class="status-value" style="font-size: 13px;">Win 10 / 11</p>
+                </div>
+            </section>
+
+            <div class="console-box" id="console">
+                </div>
+
+            <div class="actions-grid">
+                <button onclick="triggerDownload()" class="btn btn-primary">
+                    <i class="fa-solid var(--download-icon, fa-download)"></i> Download Loader
+                </button>
+                
+                <a href="https://discord.gg/P6DdJgfXJh" target="_blank" class="btn btn-secondary">
+                    <i class="fa-brands fa-discord"></i> Join Discord
+                </a>
             </div>
-        </div>
+        </main>
+
+        <section class="features-grid">
+            <div class="feature-item">
+                <i class="fa-solid fa-shield-halved feature-icon"></i>
+                <h3 class="feature-title">Kernel Bypass</h3>
+                <p class="feature-desc">Ring-0 execution model prioritizing account integrity.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-bolt feature-icon"></i>
+                <h3 class="feature-title">Zero Impact</h3>
+                <p class="feature-desc">Highly optimized codebase ensuring maximum hardware FPS.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-cloud feature-icon"></i>
+                <h3 class="feature-title">Cloud Synced</h3>
+                <p class="feature-desc">Configurations instantly updated and streamlined via server.</p>
+            </div>
+        </section>
+
+        <footer class="footer-text">
+            PSYCHOTERIA SYSTEMS &copy; 2026. ALL RIGHTS RESERVED.
+        </footer>
     </div>
-</div>
+
+    <script>
+        // Элемент консоли
+        const consoleEl = document.getElementById('console');
+        
+        // Логи, которые поочередно будут выводиться на экран с задержкой
+        const logs = [
+            'Initializing core diagnostics...',
+            'Establishing handshake with secured api cluster...',
+            'Handshake completed. Server latency: 24ms.',
+            'Fetching remote decryption sequences...',
+            'Security modules: [SUCCESS] System is safe for deployment.',
+            'Ready for execution. Click "Download Loader".'
+        ];
+
+        let currentLine = 0;
+
+        function appendLog() {
+            if (currentLine < logs.length) {
+                const line = document.createElement('div');
+                line.className = 'console-line';
+                
+                // Таймстамп в стиле терминала
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+                
+                let text = logs[currentLine];
+                // Подсвечиваем слово SUCCESS зеленым
+                if (text.includes('[SUCCESS]')) {
+                    text = text.replace('[SUCCESS]', '<span class="success">[SUCCESS]</span>');
+                }
+
+                line.innerHTML = `<span class="prefix">[${timeStr}]</span> ${text}`;
+                consoleEl.appendChild(line);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                
+                currentLine++;
+                setTimeout(appendLog, 700); // Интервал вывода строк
+            }
+        }
+
+        // Запуск логов при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(appendLog, 300);
+        });
+
+        // Высококачественный метод скачивания без перезагрузок страницы
+        function triggerDownload() {
+            // Создаем массив байт имитирующий структуру PE (заголовок MZ)
+            const mockExeData = new Uint8Array([
+                0x4D, 0x5A, 0x90, 0x00, 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
+            ]);
+            
+            const blob = new Blob([mockExeData], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'loader.exe';
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            // Очищаем за собой память
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            // Добавляем строчку в консоль о скачивании
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.innerHTML = `<span class="prefix">[SYSTEM]</span> Binary payload sent to client (loader.exe).`;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+    </script>
 </body>
 </html>
